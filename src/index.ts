@@ -7,7 +7,7 @@ const app = new Application({
 	view: document.getElementById("pixi-canvas") as HTMLCanvasElement,
 	resolution: window.devicePixelRatio || 1,
 	autoDensity: true,
-	backgroundColor: 0xFFFFFF,
+	backgroundColor: 0x000000,
 	width: 1920,
 	height: 1080
 });
