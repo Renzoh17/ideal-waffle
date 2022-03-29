@@ -1,19 +1,39 @@
-import { Application, Sprite } from 'pixi.js'
+import { Loader } from 'pixi.js';
+import { Application } from 'pixi.js'
+import { assets } from './assets';
+import { Scene } from './Scene';
 
 const app = new Application({
 	view: document.getElementById("pixi-canvas") as HTMLCanvasElement,
 	resolution: window.devicePixelRatio || 1,
 	autoDensity: true,
-	backgroundColor: 0x6495ed,
-	width: 640,
-	height: 480
+	backgroundColor: 0xFFFFFF,
+	width: 1920,
+	height: 1080
 });
 
-const clampy: Sprite = Sprite.from("clampy.png");
+window.addEventListener("resize", ()=>{
+	const scaleX =  window.innerWidth / app.screen.width; 
+	const scaleY = window.innerHeight / app.screen.height;
+	const scale = Math.min(scaleX,scaleY);
+	const gameWidht = Math.round(app.screen.width*scale);
+	const gameHeight = Math.round(app.screen.height*scale);
+	const marginHorizontal = Math.floor((window.innerWidth-gameWidht)/2);
+	const marginVertical = Math.floor((window.innerHeight-gameHeight)/2);
+	app.view.style.width = gameWidht + "px";
+	app.view.style.height = gameHeight + "px";
+	app.view.style.marginLeft=marginHorizontal + "px";
+	app.view.style.marginRight=marginHorizontal + "px";
+	app.view.style.marginTop=marginVertical + "px";
+	app.view.style.marginBottom=marginVertical + "px";
+})
+window.dispatchEvent(new Event("resize"));
 
-clampy.anchor.set(0.5);
+Loader.shared.add(assets);
 
-clampy.x = app.screen.width / 2;
-clampy.y = app.screen.height / 2;
+Loader.shared.onComplete.add(()=>{
+	const myScene = new Scene();
+	app.stage.addChild(myScene);
+});
 
-app.stage.addChild(clampy);
+Loader.shared.load();
